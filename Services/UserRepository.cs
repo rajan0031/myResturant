@@ -22,6 +22,14 @@ namespace GraphQLParser.Services
 
         }
 
+        // add a user all the logics will go here 
+        public User AddUser(User user)
+        {
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+            return user;
+        }
+
 
 
         // now define all the logic of the lal the funnctions from the Irepository 

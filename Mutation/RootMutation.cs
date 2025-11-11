@@ -1,4 +1,5 @@
 ﻿using GraphQL.Types;
+using GraphQLProject.Migrations;
 using GraphQLProject.Query;
 
 namespace GraphQLProject.Mutation
@@ -12,6 +13,9 @@ namespace GraphQLProject.Mutation
             Field<ReservationMutation>("reservationMutation").Resolve(context => new { });
             // added the mutations code for the review entity 
             Field<ReviewMutation>("reviewmutation").Resolve(context => new { });
+            // added the mutations code for the User elements 
+            Field<UserMutation>("usermutation").Resolve(context => new { });
+
 
         }
     }

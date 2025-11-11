@@ -4,6 +4,7 @@ using GraphQL.Types;
 using GraphQLParser.Services;
 using GraphQLProject.Data;
 using GraphQLProject.Interfaces;
+using GraphQLProject.Migrations;
 using GraphQLProject.Mutation;
 using GraphQLProject.Query;
 using GraphQLProject.Schema;
@@ -23,6 +24,7 @@ builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
 builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+
 
 
 
@@ -47,6 +49,7 @@ builder.Services.AddTransient<MenuMutation>();
 builder.Services.AddTransient<CategoryMutation>();
 builder.Services.AddTransient<ReservationMutation>();
 builder.Services.AddTransient<ReviewMutation>();
+builder.Services.AddTransient<UserMutation>();
 builder.Services.AddTransient<RootMutation>();
 
 
@@ -55,6 +58,8 @@ builder.Services.AddTransient<MenuInputType>();
 builder.Services.AddTransient<CategoryInputType>();
 builder.Services.AddTransient<ReservationInputType>();
 builder.Services.AddTransient<ReviewInputType>();
+builder.Services.AddTransient<UserInputType>();
+
 
 // Register the RootSchema as the implementation for ISchema.
 // This schema wires together all queries and mutations for the GraphQL endpoint.

@@ -7,6 +7,8 @@ namespace GraphQLProject.Interfaces
     {
 
         public List<User> GetAllUser();
+
+        public User AddUser(User user);
     }
 
 }
