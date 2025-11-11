@@ -26,6 +26,14 @@ namespace GraphQLProject.Query
                 var id = context.GetArgument<int>("id");
                 return reviewRepository.GetReviewById(id);
             });
+
+            // here i am writting the query to get all the reviews for the particular menuId 
+
+            Field<ListGraphType<ReviewType>>("getallreviewbymenuid").Arguments(new QueryArguments(new QueryArgument<IntGraphType> { Name = "menuId" })).Resolve(context =>
+            {
+                var menuId = context.GetArgument<int>("menuId");
+                return reviewRepository.GetAllReviewByMenuId(menuId);
+            });
         }
 
     }
