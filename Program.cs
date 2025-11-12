@@ -85,7 +85,7 @@ app.UseHttpsRedirection();
 
 // Enable the GraphiQL UI at the /graphql endpoint.
 // This provides a browser-based IDE for testing GraphQL queries and mutations.
-app.UseGraphiQl("/graphql");
+app.UseGraphiQl("/graphql"); // thi sis the api end point here 
 
 // Activate the GraphQL endpoint using the registered ISchema.
 // This handles incoming GraphQL requests and routes them through your schema.

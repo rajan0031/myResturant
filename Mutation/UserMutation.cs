@@ -27,6 +27,25 @@ namespace GraphQLProject.Migrations
             });
 
 
+            Field<UserType>("updateuser").Arguments(new QueryArguments(new QueryArgument<UserInputType> { Name = "user" }, new QueryArgument<IntGraphType> { Name = "id" })).Resolve(context =>
+              {
+                  var user = context.GetArgument<User>("user");
+                  var id = context.GetArgument<int>("id");
+                  return userRepository.UpdateUserDetail(user, id);
+
+              });
+
+
+            // this is the mutations for the login a user to the database 
+            Field<StringGraphType>("loginuser").Arguments(new QueryArguments(new QueryArgument<StringGraphType> { Name = "email" }, new QueryArgument<StringGraphType> { Name = "password" })).Resolve(context =>
+              {
+                  var email = context.GetArgument<string>("email");
+                  var password = context.GetArgument<string>("password");
+                  return userRepository.LoginUser(email, password);
+
+              });
+
+
 
 
         }

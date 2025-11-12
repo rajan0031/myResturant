@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GraphQLProject.Migrations
 {
     [DbContext(typeof(GraphQLDbContext))]
-    [Migration("20230820173930_SeedData")]
-    partial class SeedData
+    [Migration("20251112053351_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "9.0.0-preview.4.24267.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -42,26 +42,6 @@ namespace GraphQLProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ImageUrl = "https://example.com/categories/appetizers.jpg",
-                            Name = "Appetizers"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ImageUrl = "https://example.com/categories/main-course.jpg",
-                            Name = "Main Course"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ImageUrl = "https://example.com/categories/desserts.jpg",
-                            Name = "Desserts"
-                        });
                 });
 
             modelBuilder.Entity("GraphQLProject.Models.Menu", b =>
@@ -92,35 +72,6 @@ namespace GraphQLProject.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Menus");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            Description = "Spicy chicken wings served with blue cheese dip.",
-                            ImageUrl = "https://example.com/menus/chicken-wings.jpg",
-                            Name = "Chicken Wings",
-                            Price = 9.9900000000000002
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 2,
-                            Description = "Grilled steak with mashed potatoes and vegetables.",
-                            ImageUrl = "https://example.com/menus/steak.jpg",
-                            Name = "Steak",
-                            Price = 24.5
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 3,
-                            Description = "Decadent chocolate cake with a scoop of vanilla ice cream.",
-                            ImageUrl = "https://example.com/menus/chocolate-cake.jpg",
-                            Name = "Chocolate Cake",
-                            Price = 6.9500000000000002
-                        });
                 });
 
             modelBuilder.Entity("GraphQLProject.Models.Reservation", b =>
@@ -149,41 +100,68 @@ namespace GraphQLProject.Migrations
                     b.Property<string>("SpecialRequest")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Reservations");
+                    b.HasIndex("UserId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CustomerName = "John Doe",
-                            Email = "johndoe@example.com",
-                            PartySize = 2,
-                            PhoneNumber = "555-123-4567",
-                            ReservationDate = new DateTime(2023, 8, 27, 22, 39, 30, 224, DateTimeKind.Local).AddTicks(2954),
-                            SpecialRequest = "No nuts in the dishes, please."
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CustomerName = "Jane Smith",
-                            Email = "janesmith@example.com",
-                            PartySize = 4,
-                            PhoneNumber = "555-987-6543",
-                            ReservationDate = new DateTime(2023, 8, 30, 22, 39, 30, 224, DateTimeKind.Local).AddTicks(2972),
-                            SpecialRequest = "Gluten-free options required."
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CustomerName = "Michael Johnson",
-                            Email = "michaeljohnson@example.com",
-                            PartySize = 6,
-                            PhoneNumber = "555-789-0123",
-                            ReservationDate = new DateTime(2023, 9, 3, 22, 39, 30, 224, DateTimeKind.Local).AddTicks(2973),
-                            SpecialRequest = "Celebrating a birthday."
-                        });
+                    b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("GraphQLProject.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Ratting")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("GraphQLProject.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("GraphQLProject.Models.Menu", b =>
@@ -195,9 +173,49 @@ namespace GraphQLProject.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GraphQLProject.Models.Reservation", b =>
+                {
+                    b.HasOne("GraphQLProject.Models.User", "User")
+                        .WithMany("Reservations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GraphQLProject.Models.Review", b =>
+                {
+                    b.HasOne("GraphQLProject.Models.Menu", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GraphQLProject.Models.User", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GraphQLProject.Models.Category", b =>
                 {
                     b.Navigation("Menus");
+                });
+
+            modelBuilder.Entity("GraphQLProject.Models.Menu", b =>
+                {
+                    b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("GraphQLProject.Models.User", b =>
+                {
+                    b.Navigation("Reservations");
+
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

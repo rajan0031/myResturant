@@ -14,9 +14,14 @@ namespace GraphQLProject.Models
 
         public int? Role { get; set; }
 
+        // navigation property : one user can have many reservations 
 
+        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+
+        // navigations property : one user can give reviews for the multiple menu items 
+
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     }
-
 
 }

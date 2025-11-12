@@ -15,6 +15,8 @@ namespace GraphQLParser.Services
 
         // constructor , i am going to define constructor here now 
 
+
+
         public UserRepository(GraphQLDbContext graphQLDbContext)
         {
 
@@ -40,6 +42,41 @@ namespace GraphQLParser.Services
             return dbContext.Users.ToList();
         }
 
+        // this is the function which will show a simple login functionality here 
+
+        public string LoginUser(string email, string password)
+        {
+
+            var userDetail = dbContext.Users.FirstOrDefault(data => data.Email == email);
+            if (userDetail == null)
+            {
+                return "Email does not exist, check Your email";
+            }
+            var userResult = dbContext.Users.FirstOrDefault(data => data.Email == email && data.Password == password);
+            if (userResult == null)
+            {
+                return "Password is incorrect";
+            }
+            return "Login SuccessFull";
+        }
+
+        // this is the UserRepo for the updating the details of the user 
+        public User UpdateUserDetail(User user, int id)
+        {
+
+            var userResult = dbContext.Users.Find(id);
+
+            if (userResult == null)
+            {
+                return null;
+            }
+
+            userResult.Name = user.Name;
+            userResult.Email = user.Email;
+            userResult.Role = user.Role;
+            dbContext.SaveChanges();
+            return user;
+        }
     }
 
 

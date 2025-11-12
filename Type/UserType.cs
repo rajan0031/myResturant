@@ -15,7 +15,7 @@ namespace GraphQLProject.Type
             Field(u => u.Id);
             Field(u => u.Name);
             Field(u => u.Email);
-            // Field(u => u.Password); // removed because of the security rson 
+            Field(u => u.Password); // removed because of the security rson 
             Field(u => u.Role);
 
         }
